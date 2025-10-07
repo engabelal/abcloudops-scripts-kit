@@ -40,10 +40,9 @@ This repository contains automation scripts organized by platform:
 ```
 abcloudops-scripts-kit/
 ├── aws/              # AWS automation scripts
-├── azure/            # Azure automation scripts
-├── kubernetes/       # Kubernetes management scripts
-├── monitoring/       # Monitoring and alerting scripts
-├── security/         # Security audit scripts
+│   └── check-aws-costs.sh
+├── linux/            # Linux system administration scripts
+├── utils/            # General utility scripts
 └── README.md
 ```
 
@@ -63,15 +62,7 @@ Browse the directories above to discover available scripts. Each script includes
 ### General Requirements
 - **Bash** 4.0 or higher
 - **Git** (for cloning the repository)
-
-### AWS Scripts
-- **AWS CLI** v2.x installed and configured
-- **AWS Credentials** configured (`~/.aws/credentials` or environment variables)
-- **IAM Permissions** for the services you want to scan
-
-### Installation Guides
-- [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- [Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
+- Platform-specific tools (check individual script headers for requirements)
 
 ---
 
@@ -88,8 +79,8 @@ cd abcloudops-scripts-kit
 
 ```bash
 chmod +x aws/*.sh
-chmod +x azure/*.sh
-chmod +x kubernetes/*.sh
+chmod +x linux/*.sh
+chmod +x utils/*.sh
 ```
 
 ---
