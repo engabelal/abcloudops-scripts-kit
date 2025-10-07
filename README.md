@@ -33,29 +33,28 @@ This toolkit provides battle-tested scripts for:
 
 ## 📦 Scripts
 
-### AWS Scripts
+This repository contains automation scripts organized by platform:
 
-| Script | Description | Version |
-|--------|-------------|---------|
-| [check-aws-costs.sh](aws/check-aws-costs.sh) | Scans AWS account for billable resources (EC2, EBS, EIP, NAT, RDS, etc.) | v1.1 |
+### 📁 Directory Structure
 
-**Coming Soon:**
-- `cleanup-unused-resources.sh` - Automatically remove unused AWS resources
-- `backup-ec2-snapshots.sh` - Automated EBS snapshot management
-- `audit-iam-users.sh` - Security audit for IAM users and permissions
-- `monitor-aws-health.sh` - Real-time AWS service health monitoring
+```
+abcloudops-scripts-kit/
+├── aws/              # AWS automation scripts
+├── azure/            # Azure automation scripts
+├── kubernetes/       # Kubernetes management scripts
+├── monitoring/       # Monitoring and alerting scripts
+├── security/         # Security audit scripts
+└── README.md
+```
 
-### Azure Scripts
+Each directory contains platform-specific scripts with detailed documentation. Check individual script headers for usage instructions, version info, and examples.
 
-**Coming Soon:**
-- `check-azure-costs.sh` - Azure cost optimization scanner
-- `cleanup-azure-resources.sh` - Remove unused Azure resources
-
-### Kubernetes Scripts
-
-**Coming Soon:**
-- `k8s-health-check.sh` - Kubernetes cluster health monitoring
-- `k8s-resource-cleanup.sh` - Clean up unused K8s resources
+### Available Scripts
+Browse the directories above to discover available scripts. Each script includes:
+- Detailed header with description and version
+- Usage examples and parameters
+- Prerequisites and dependencies
+- Author information and contact
 
 ---
 
@@ -97,94 +96,58 @@ chmod +x kubernetes/*.sh
 
 ## 💻 Usage
 
-### AWS Cost Scanner
+### General Usage Pattern
 
-**Basic Usage:**
+**Basic Execution:**
 ```bash
-./aws/check-aws-costs.sh
+./<platform>/<script-name>.sh
 ```
 
-**Custom Region:**
+**With Environment Variables:**
 ```bash
-AWS_REGION=us-east-1 ./aws/check-aws-costs.sh
+VARIABLE=value ./<platform>/<script-name>.sh
 ```
 
-**Custom Profile:**
+**With Multiple Parameters:**
 ```bash
-AWS_PROFILE=production ./aws/check-aws-costs.sh
+VAR1=value1 VAR2=value2 ./<platform>/<script-name>.sh
 ```
 
-**Both Custom Region and Profile:**
-```bash
-AWS_REGION=eu-west-1 AWS_PROFILE=staging ./aws/check-aws-costs.sh
-```
+### Common Features
 
-**Output:**
-- Console output with color-coded warnings
-- Timestamped report file: `aws-cost-report-YYYYMMDD-HHMMSS.txt`
+Most scripts provide:
+- 📊 Color-coded console output
+- 💾 Timestamped report files
+- ⚙️ Environment variable configuration
+- 📝 Detailed logging
+- ✅ Exit status codes
 
-**What It Checks:**
-- ✅ Running EC2 instances
-- ✅ Unattached Elastic IPs (wasting money!)
-- ✅ Detached EBS volumes (still billed!)
-- ✅ Lambda functions
-- ✅ S3 buckets
-- ✅ NAT Gateways (expensive!)
-- ✅ Load Balancers (ALB/NLB)
-- ✅ RDS instances
+### Script Documentation
 
----
+Each script contains:
+- Header with version and author info
+- Inline comments explaining logic
+- Usage examples in comments
+- Configuration options
 
-## 📊 Example Output
-
-```
-=
-🔍 AWS Cost & Resource Scanner v1.1
-Made by: Ahmed Belal | GitHub: @engabelal
-Region: eu-north-1 | Profile: default
-Date: 2025-01-15 14:30:00
-=
-
-💻 EC2 Instances (Running):
-⚠️  Found 2 running EC2 instance(s)
-
-🌐 Elastic IPs (Unattached - Billed!):
-❌ Found 1 unattached Elastic IP(s) - WASTING MONEY!
-
-💾 EBS Volumes (Detached - Still Billed!):
-❌ Found 3 detached EBS volume(s) - WASTING MONEY!
-
-🚦 NAT Gateways (Very Expensive!):
-💸 Found 1 NAT Gateway(s) - ~$0.045/hour each!
-
-=
-📊 SUMMARY
-=
-Total billable resources found: 7
-⚠️  WARNING: You have 7 resources that may be costing money!
-
-💾 Report saved to: aws-cost-report-20250115-143000.txt
-```
+Run any script with `-h` or `--help` for detailed usage information (if supported).
 
 ---
 
 ## 🔧 Configuration
 
-### Environment Variables
+Scripts can be configured via:
+- **Environment Variables** - Override defaults without editing files
+- **Script Headers** - Modify configuration section in each script
+- **Command-line Arguments** - Pass parameters directly (script-dependent)
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `AWS_REGION` | AWS region to scan | `eu-north-1` |
-| `AWS_PROFILE` | AWS CLI profile to use | `default` |
+### Customization Tips
 
-### Customization
-
-Edit the scripts to:
-- Change default region/profile
-- Add custom resource checks
-- Modify output format
-- Add email notifications
-- Integrate with monitoring tools
+- Edit configuration sections at the top of each script
+- Add custom logic in designated sections
+- Modify output formats as needed
+- Integrate with your existing tools and workflows
+- Add notifications (email, Slack, etc.)
 
 ---
 
