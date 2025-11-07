@@ -6,23 +6,20 @@
 # Description: Analyzes AWS costs for specified date ranges
 # Requirements: aws-cli, jq, python3
 # 
-# Quickstart (run from this directory):
-#   chmod +x aws-cost-analysis.sh
-#   ./aws-cost-analysis.sh                      # Interactive prompts
-#   ./aws-cost-analysis.sh --range 2025-11-01 2025-11-07
+# Usage: 
+#   ./aws-cost-analysis.sh
+#       # Interactive mode (prompts for dates)
 #   ./aws-cost-analysis.sh 2025-10-01 2025-11-01 2025-11-01 2025-11-07
+#       # Non-interactive mode with explicit previous/current periods
+#   ./aws-cost-analysis.sh --range 2025-11-01 2025-11-07
+#       # Non-interactive mode (enter current period once; previous derived automatically)
 #
-# Usage modes:
-#   • Interactive (prompts for two or four dates)
-#   • Explicit non-interactive (provide previous+current dates)
-#   • Single-period non-interactive (`--range` derives the previous period automatically)
-#
-# Arguments (explicit non-interactive mode):
+# Arguments (non-interactive):
 #   $1: Previous period start date (YYYY-MM-DD)
 #   $2: Previous period end date (YYYY-MM-DD)
 #   $3: Current period start date (YYYY-MM-DD)
 #   $4: Current period end date (YYYY-MM-DD)
-#   --range <Curr Start> <Curr End>: Provide the current period once and derive the previous one
+#   --range <Curr Start> <Curr End>: Provide a single period and derive the previous one
 #
 # Examples:
 #   # Compare October vs November MTD
@@ -457,9 +454,9 @@ print()
 # Current Month Section
 print(f"📊 {current_month_name} (Month-to-Date: {days_in_month} days)")
 print("-" * 80)
-print(f"Current Total:       ${current_total:>10.2f}")
-print(f"Daily Average:       ${daily_avg:>10.2f}")
-print(f"Projected Month:     ${projected_month:>10.2f}")
+print(f"Current Total:       \${current_total:>10.2f}")
+print(f"Daily Average:       \${daily_avg:>10.2f}")
+print(f"Projected Month:     \${projected_month:>10.2f}")
 print()
 
 if current_sorted:
@@ -467,7 +464,7 @@ if current_sorted:
     for service, cost in current_sorted[:15]:
         if cost > 0.01:
             pct = (cost/current_total)*100 if current_total > 0 else 0
-            print(f"  {service:50s} ${cost:8.2f} ({pct:5.1f}%)")
+            print(f"  {service:50s} \${cost:8.2f} ({pct:5.1f}%)")
 else:
     print("  No significant costs recorded")
 print()
@@ -476,7 +473,7 @@ print()
 print("=" * 80)
 print(f"📊 {previous_month_name} (Full Month)")
 print("-" * 80)
-print(f"Total:               ${previous_total:>10.2f}")
+print(f"Total:               \${previous_total:>10.2f}")
 print()
 
 if previous_sorted:
@@ -484,7 +481,7 @@ if previous_sorted:
     for service, cost in previous_sorted[:15]:
         if cost > 0.01:
             pct = (cost/previous_total)*100 if previous_total > 0 else 0
-            print(f"  {service:50s} ${cost:8.2f} ({pct:5.1f}%)")
+            print(f"  {service:50s} \${cost:8.2f} ({pct:5.1f}%)")
 else:
     print("  No significant costs recorded")
 print()
@@ -497,9 +494,9 @@ print("-" * 80)
 change = projected_month - previous_total
 change_pct = (change/previous_total)*100 if previous_total > 0 else 0
 
-print(f"Previous Month:      ${previous_total:>10.2f}")
-print(f"Current Projected:   ${projected_month:>10.2f}")
-print(f"Expected Change:     ${change:>+10.2f} ({change_pct:>+6.1f}%)")
+print(f"Previous Month:      \${previous_total:>10.2f}")
+print(f"Current Projected:   \${projected_month:>10.2f}")
+print(f"Expected Change:     \${change:>+10.2f} ({change_pct:>+6.1f}%)")
 print()
 
 # Service-level changes
@@ -513,14 +510,14 @@ for service in all_services:
     current_projected_svc = (current_cost/days_in_month)*30 if days_in_month > 0 else 0
     change = current_projected_svc - previous_cost
     
-    if abs(change) > 0.10:  # Only show changes > $0.10
+    if abs(change) > 0.10:  # Only show changes > \$0.10
         service_changes.append((service, previous_cost, current_projected_svc, change))
 
 if service_changes:
     service_changes.sort(key=lambda x: abs(x[3]), reverse=True)
     for service, prev_cost, curr_proj, change in service_changes[:15]:
         arrow = "↑" if change > 0 else "↓"
-        print(f"  {arrow} {service:48s} ${prev_cost:7.2f} → ${curr_proj:7.2f} ({change:+7.2f})")
+        print(f"  {arrow} {service:48s} \${prev_cost:7.2f} → \${curr_proj:7.2f} ({change:+7.2f})")
 else:
     print("  No significant changes detected")
 
